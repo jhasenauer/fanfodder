@@ -8,9 +8,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import com.fanfodder.aggregator.data.model.Feed;
 import com.fanfodder.aggregator.data.model.FeedItem;
+import com.fanfodder.aggregator.data.repository.FeedItemRepository;
+import com.fanfodder.aggregator.data.repository.FeedRepository;
 import com.fanfodder.aggregator.util.StringUtils;
 import com.rometools.rome.feed.synd.SyndCategory;
 import com.rometools.rome.feed.synd.SyndContent;
@@ -21,11 +25,18 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
-@Component("poller")
+@Component
 public class Poller {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Poller.class);
 
+  @Autowired
+  private FeedRepository feedRepository;
+  
+  @Autowired
+  private FeedItemRepository feedItemRepository;
+  
+  @Scheduled(fixedDelay = 360000)
   public void pollFeeds() {    
     List<String> feedUrls = new ArrayList<>();    
     feedUrls.add("http://feeds.feedburner.com/Razzball?format=xml");
@@ -53,9 +64,9 @@ public class Poller {
           feedItem.setFeed(feed);
           feedItems.add(feedItem);
         }
-//        feedService.saveFeed(feed);
+        feedRepository.save(feed);
         LOGGER.info("Saved/updated feed " + feed.getUrl());
-//        feedItemService.addFeedItems(feedItems);
+        feedItemRepository.save(feedItems);
         LOGGER.info("Saved/updated " + feedItems.size() + " feed items");
       }
     }

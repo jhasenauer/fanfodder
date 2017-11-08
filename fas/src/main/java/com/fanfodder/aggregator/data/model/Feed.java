@@ -2,9 +2,14 @@ package com.fanfodder.aggregator.data.model;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "feeds")
 public class Feed {
 
+  @Id
   private String url;
   private String title;
   private String description;
@@ -15,6 +20,7 @@ public class Feed {
   private Date lastProcessedDate;
   private boolean status = true;
 
+  @Transient
   private List<FeedItem> feedItems;
 
   /**

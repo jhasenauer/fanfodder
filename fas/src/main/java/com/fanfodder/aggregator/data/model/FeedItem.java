@@ -2,11 +2,17 @@ package com.fanfodder.aggregator.data.model;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "feedItems")
 public class FeedItem {
 
+  @DBRef
   private Feed feed;
 
+  @Id
   private String link;
   private String title;
   private String description;

@@ -1,18 +1,14 @@
 package com.fanfodder.aggregator;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@SpringBootApplication
+@EnableScheduling
 public class Aggregator {
 
-  ClassPathXmlApplicationContext ctx;
-  
   public static void main(String[] args) {
-    Aggregator driver = new Aggregator();
-    driver.config();
+    SpringApplication.run(Aggregator.class);
   }
-
-  private void config() {
-    ctx = new ClassPathXmlApplicationContext("spring-config.xml");
-  }
-
 }
