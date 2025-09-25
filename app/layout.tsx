@@ -23,10 +23,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
               <Link href="/manage" className="text-sm">Manage</Link>
               {session ? (
                 <form action="/api/auth/signout" method="post">
-                  <button type="submit" className="text-sm">Sign out</button>
+                  <button type="submit" className="text-sm">Log Out</button>
                 </form>
               ) : (
-                <Link href="/signin" className="text-sm">Sign in</Link>
+                <Link href="/login" className="text-sm">Log In</Link>
               )}
             </nav>
           </div>
