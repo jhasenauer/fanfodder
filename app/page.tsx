@@ -1,4 +1,5 @@
 import FeedList from "@/components/FeedList";
+import SubscriptionList from "@/components/SubscriptionList";
 
 export default function Page() {
   return (
@@ -7,7 +8,7 @@ export default function Page() {
         {/* left: subscriptions */}
         <div className="bg-white p-4 rounded shadow">
           <h3 className="font-semibold mb-2">Subscriptions</h3>
-          <div>-- subscription list component (left as exercise) --</div>
+          <SubscriptionList />
         </div>
       </aside>
 

@@ -74,13 +74,42 @@ export async function POST(req: NextRequest) {
   }).catch(() => null);
 
   if (!already) {
-    await prisma.subscription.create({
-      data: {
-        userId: session.user.id,
-        feedId: feed.id,
-      },
-    });
+    await subscribeUserToFeed(session.user.id, feed.id);
   }
 
   return NextResponse.json({ feed });
+}
+
+async function subscribeUserToFeed(userId: string, feedId: string) {
+  // 1. Add subscription record
+  const newSubscription = await prisma.subscription.create({
+    data: {
+      userId,
+      feedId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  // 2. Get all feed items of that feed
+  const feedItems = await prisma.feedItem.findMany({
+    where: { feedId },
+    select: { id: true },
+  });
+
+  // 3. Prepare UserFeedItems data
+  const userFeedItemsData = feedItems.map(item => ({
+    subscriptionId: newSubscription.id,
+    feedItemId: item.id,
+    isRead: false,    // default state
+    isStarred: false, // default state
+  }));
+
+  // 4. Insert many UserFeedItems (skip duplicates if needed)
+  // Use `createMany` with skipDuplicates to avoid errors if some exist
+  await prisma.userFeedItem.createMany({
+    data: userFeedItemsData,
+    skipDuplicates: true, // if supported and you want to ignore duplicates
+  });
 }
