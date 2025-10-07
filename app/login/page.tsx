@@ -18,7 +18,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Button className="w-full mb-2" onClick={() => signIn('github')}>
+    <Button className="w-full mb-2" onClick={handleLogin}>
         <FaGithub className="h-5 w-10" />
         Sign in with GitHub
     </Button>

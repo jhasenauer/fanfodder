@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Subscription {
   id: number | string;
@@ -12,12 +13,14 @@ const SubscriptionList: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchSubscriptions() {
       try {
-        const res = await fetch('/api/subscriptions');
+        const res = await fetch('/api/subscriptions', {credentials: 'include'});
         if (res.status === 401) {
+          router.push('/login');
           setError('Please log in.');
           return;
         }
